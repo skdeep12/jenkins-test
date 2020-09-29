@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "build number is ${APP_BUILD_VERSION}"
+                echo "build number is something, just checking trigger"
                 sh "ls"
             }
         }
