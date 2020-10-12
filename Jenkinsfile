@@ -12,13 +12,10 @@ pipeline {
     stages {
         stage("ssh step"){
             steps {
-                withCredentials([[
-                    $class: 'SSHUserPrivateKeyBinding',
-                    credentialsId: 'staging-bastion',
-                    keyFileVariable: 'identity',
-                    passphraseVariable: '',
-                    usernameVariable: 'user'
-                ]]) {
+                withCredentials([
+                    [$class: 'SSHUserPrivateKeyBinding', credentialsId: 'staging-bastion', keyFileVariable: 'identity',passphraseVariable: '',usernameVariable: 'user'],
+                    [$class: 'SSHUserPrivateKeyBinding', credentialsId: 'staging-kheti', keyFileVariable: 'kheti',passphraseVariable: '',usernameVariable: 'ubuntu']
+                ]) {
                     script {
                         remote.user = user
                         remote.identityFile = identity
