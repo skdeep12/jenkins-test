@@ -20,7 +20,7 @@ pipeline {
                         remote.user = user
                         remote.identityFile = identity
                     }
-                    sshCommand remote: remote,command: "ssh -i ${kheti} ${ubuntu}@10.0.0.43 ls"
+                    sshCommand remote: remote,command: "ls"
                 }
             }
         }
