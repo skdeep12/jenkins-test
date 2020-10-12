@@ -32,6 +32,7 @@ pipeline {
                         kheti_prod.identityFile = kheti_prod_key
                     }
                     sshCommand remote: kheti_prod,command: "cd kheti && eval `ssh-agent` && ssh-add ~/.ssh/github_rsa && git pull"
+                    
                 }
             }
         }
