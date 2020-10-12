@@ -40,17 +40,19 @@ pipeline {
             }
         }
         stage("celery deploy to prod"){
-             withCredentials([
-                    [$class: 'SSHUserPrivateKeyBinding', credentialsId: 'prod-kheti', keyFileVariable: 'celery_prod_key',passphraseVariable: '',usernameVariable: 'celery_user']
-                ]) {
-                script {
-                    celery_prod.user = celery_user
-                    celery_prod.identityFile = celery_prod_key
+            steps{
+                 withCredentials([
+                        [$class: 'SSHUserPrivateKeyBinding', credentialsId: 'prod-kheti', keyFileVariable: 'celery_prod_key',passphraseVariable: '',usernameVariable: 'celery_user']
+                    ]) {
+                    script {
+                        celery_prod.user = celery_user
+                        celery_prod.identityFile = celery_prod_key
+                    }
+                    sshCommand remote: celery_prod,command: "cd kheti && eval `ssh-agent` && ssh-add ~/.ssh/github_rsa && git pull"
+                    sshCommand remote: celery_prod, sudo: true, command: "systemctl stop celery"
+                    sshCommand remote: celery_prod, sudo: true, command: "systemctl start celery"
+                    sshCommand remote: celery_prod, sudo: true, command: "systemctl status celery"
                 }
-                sshCommand remote: celery_prod,command: "cd kheti && eval `ssh-agent` && ssh-add ~/.ssh/github_rsa && git pull"
-                sshCommand remote: celery_prod, sudo: true, command: "systemctl stop celery"
-                sshCommand remote: celery_prod, sudo: true, command: "systemctl start celery"
-                sshCommand remote: celery_prod, sudo: true, command: "systemctl status celery"
             }
         }
     }
