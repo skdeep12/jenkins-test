@@ -19,7 +19,7 @@ pipeline {
                     usernameVariable: 'user'
                 ]]) {
                     script {
-                        remote.userName = user
+                        remote.user = user
                         remote.identity = identity
                     }
                     sshCommand remote: remote,command: 'ls'
