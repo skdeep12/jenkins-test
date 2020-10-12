@@ -20,9 +20,8 @@ pipeline {
                 ]]) {
                     script {
                         remote.user = user
-                        remote.identity = identity
+                        remote.identityFile = identity
                     }
-                    echo remote
                     sshCommand remote: remote,command: 'ls'
                 }
             }
