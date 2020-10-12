@@ -1,4 +1,8 @@
-
+def remote = [:]
+remote.name = "node-1"
+remote.host = "bastion.dehaatagri.com"
+remote.allowAnyHosts = true
+remote.port = 272
 pipeline {
     agent any
     parameters {
@@ -14,13 +18,10 @@ pipeline {
                     passphraseVariable: '',
                     usernameVariable: 'user'
                 ]]) {
-                    def remote = [:]
-                    remote.name = "node-1"
-                    remote.host = "bastion.dehaatagri.com"
-                    remote.allowAnyHosts = true
-                    remote.port = 272
-                    remote.userName = user
-                    remote.identity = identity
+                    script {
+                        remote.userName = user
+                        remote.identity = identity
+                    }
                     sshCommand remote: remote,command: 'ls'
                 }
             }
