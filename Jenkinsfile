@@ -33,7 +33,8 @@ pipeline {
                     }
                     sshCommand remote: kheti_prod,command: "cd kheti && eval `ssh-agent` && ssh-add ~/.ssh/github_rsa && git pull"
                     sshCommand remote: kheti_prod,command: "cd kheti && source venv/bin/activate && python manage.py migrate"
-                    sshCommand remote: kheti_prod, sudo: true, command: "systemctl stop kheti && systemctl start kheti"
+                    sshCommand remote: kheti_prod, sudo: true, command: "systemctl stop kheti" 
+                    sshCommand remote: kheti_prod, sudo: true, command: "systemctl start kheti"
                     sshCommand remote: kheti_prod, sudo: true, command: "systemctl status kheti"
                 }
             }
