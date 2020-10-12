@@ -23,6 +23,7 @@ pipeline {
                     remote.identity = identity
                     sshCommand remote: remote,command: 'ls'
                 }
+            }
         }
     }
 }
