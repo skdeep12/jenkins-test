@@ -22,6 +22,7 @@ pipeline {
                         remote.user = user
                         remote.identity = identity
                     }
+                    echo remote
                     sshCommand remote: remote,command: 'ls'
                 }
             }
