@@ -32,7 +32,7 @@ pipeline {
                         kheti_prod.identityFile = kheti_prod_key
                     }
                     sshCommand remote: kheti_prod,command: "cd kheti && eval `ssh-agent` && ssh-add ~/.ssh/github_rsa && git pull"
-                    sshCommand remote: kheti_prod,command: "cd kheti && source venv/bin/activate && python manage.py migrate"
+                    sshCommand remote: kheti_prod,command: "cd kheti && source venv/bin/activate && pip install -r requirements.txt && python manage.py migrate"
                     sshCommand remote: kheti_prod, sudo: true, command: "systemctl stop kheti" 
                     sshCommand remote: kheti_prod, sudo: true, command: "systemctl start kheti"
                     sshCommand remote: kheti_prod, sudo: true, command: "systemctl status kheti"
@@ -49,6 +49,7 @@ pipeline {
                         celery_prod.identityFile = celery_prod_key
                     }
                     sshCommand remote: celery_prod,command: "cd kheti && eval `ssh-agent` && ssh-add ~/.ssh/github_rsa && git pull"
+                    sshCommand remote: celery_prod,command: "cd kheti && source venv/bin/activate && pip install -r requirements.txt && python manage.py migrate"
                     sshCommand remote: celery_prod, sudo: true, command: "systemctl stop celery"
                     sshCommand remote: celery_prod, sudo: true, command: "systemctl start celery"
                     sshCommand remote: celery_prod, sudo: true, command: "systemctl status celery"
