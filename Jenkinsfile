@@ -4,6 +4,18 @@ remote.host = "bastion.dehaatagri.com"
 remote.allowAnyHosts = true
 remote.port = 272
 
+def kheti_prod = [:]
+kheti_prod.name = "kheti-prod"
+kheti_prod.host = "172.31.26.59"
+kheti_prod.allowAnyHosts = true
+kheti_prod.port = 22
+
+def celery_prod = [:]
+celery_prod.name = "celery-prod"
+celery_prod.host = "172.31.23.47"
+celery_prod.allowAnyHosts = true
+celery_prod.port = 22
+
 pipeline {
     agent any
     parameters {
@@ -13,14 +25,13 @@ pipeline {
         stage("ssh step"){
             steps {
                 withCredentials([
-                    [$class: 'SSHUserPrivateKeyBinding', credentialsId: 'staging-bastion', keyFileVariable: 'identity',passphraseVariable: '',usernameVariable: 'user'],
-                    [$class: 'SSHUserPrivateKeyBinding', credentialsId: 'staging-kheti', keyFileVariable: 'kheti',passphraseVariable: '',usernameVariable: 'ubuntu']
+                    [$class: 'SSHUserPrivateKeyBinding', credentialsId: 'prod-kheti', keyFileVariable: 'kheti_prod_key',passphraseVariable: '',usernameVariable: 'kheti_user']
                 ]) {
                     script {
-                        remote.user = user
-                        remote.identityFile = identity
+                        kheti_prod.user = kheti_user
+                        kheti_prod.identityFile = kheti_prod_key
                     }
-                    sshCommand remote: remote,command: "ls"
+                    sshCommand kheti_prod: remote,command: "cd kheti && eval `ssh-agent` && ssh-add ~/.ssh/github_rsa && git pull"
                 }
             }
         }
