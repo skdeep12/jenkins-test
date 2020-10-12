@@ -1,5 +1,5 @@
 def remote = [:]
-remote.name = "node-1"
+remote.name = "staging-bastion"
 remote.host = "bastion.dehaatagri.com"
 remote.allowAnyHosts = true
 remote.port = 272
