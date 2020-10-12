@@ -3,6 +3,7 @@ remote.name = "staging-bastion"
 remote.host = "bastion.dehaatagri.com"
 remote.allowAnyHosts = true
 remote.port = 272
+
 pipeline {
     agent any
     parameters {
