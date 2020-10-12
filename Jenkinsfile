@@ -22,7 +22,7 @@ pipeline {
         string(defaultValue: "$BUILD_NUMBER", description: 'What is the build number?', name: 'APP_BUILD_VERSION')
     }
     stages {
-        stage("ssh step"){
+        stage("kheti deploy to prod"){
             steps {
                 withCredentials([
                     [$class: 'SSHUserPrivateKeyBinding', credentialsId: 'prod-kheti', keyFileVariable: 'kheti_prod_key',passphraseVariable: '',usernameVariable: 'kheti_user']
@@ -37,6 +37,20 @@ pipeline {
                     sshCommand remote: kheti_prod, sudo: true, command: "systemctl start kheti"
                     sshCommand remote: kheti_prod, sudo: true, command: "systemctl status kheti"
                 }
+            }
+        }
+        stage("celery deploy to prod"){
+             withCredentials([
+                    [$class: 'SSHUserPrivateKeyBinding', credentialsId: 'prod-kheti', keyFileVariable: 'celery_prod_key',passphraseVariable: '',usernameVariable: 'celery_user']
+                ]) {
+                script {
+                    celery_prod.user = celery_user
+                    celery_prod.identityFile = celery_prod_key
+                }
+                sshCommand remote: celery_prod,command: "cd kheti && eval `ssh-agent` && ssh-add ~/.ssh/github_rsa && git pull"
+                sshCommand remote: celery_prod, sudo: true, command: "systemctl stop celery"
+                sshCommand remote: celery_prod, sudo: true, command: "systemctl start celery"
+                sshCommand remote: celery_prod, sudo: true, command: "systemctl status celery"
             }
         }
     }
